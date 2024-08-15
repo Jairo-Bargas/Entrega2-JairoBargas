@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+     <!-- Sección de inicio de sesión -->
+     <div id="login-section">
+        <h2>Iniciar Sesión</h2>
+        <form id="login-form">
+            <label for="username">Nombre de Usuario:</label>
+            <input type="text" id="username" required><br><br>
+            <label for="password">Contraseña:</label>
+            <input type="password" id="password" required><br><br>
+            <button type="submit">Iniciar Sesión</button>
+        </form>
+        <p id="login-error" class="hidden error">Los datos ingresados son incorrectos</p>
+    </div>
+
+    <!-- Sección de preguntas post-venta -->
+    <div id="post-venta-section" class="hidden">
+        <h2>Servicio Post Venta</h2>
+        <form id="post-venta-form">
+            <!-- Las preguntas se insertarán aquí dinámicamente -->
+        </form>
+        <button id="submit-responses">Enviar Respuestas</button>
+        <p id="thank-you-message" class="hidden success">En breve nos pondremos en contacto con usted. Muchas gracias por confiar en John Deere</p>
+    </div>
+    <script src="Entrega2.js"></script>
+</body>
+</html>
