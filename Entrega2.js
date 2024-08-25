@@ -1,151 +1,51 @@
-const infoUsuario = {
-    usuario: "jairo",
-    contrasenia: "0000",
-    ingreso: false,
-};
+/* Se simula una base de datos de clientes, que se supone se carga desde antes cuando adquieren la máquina */
 
-const postVentas = {
-    servicios: [
-        {
-            frase: "¿Qué servicio requiere?",
-            opciones: [
-                "A - Consulta online.",
-                "B - Servicio de mantenimiento.",
-                "C - Servicio por falla.",
-                "D - Reparación integral.",
-                "E - Capacitación",
-                "F - Garantía",
-            ],
-            respuesta: {
-                usuario: "",
-                estado: "NO RESPONDIO",
-            },
-        },
-        {
-            frase: "¿Seleccione su máquina?",
-            opciones: [
-                "A - Tractor de jardín",
-                "B - Tractores serie 5/6.",
-                "C - Tractores serie 7/8/9.",
-                "D - Cosechadora.",
-                "E - Pulverizadora",
-                "F - Sembradora",
-            ],
-            respuesta: {
-                usuario: "",
-                estado: "NO RESPONDIO",
-            },
-        },
-        {
-            frase: "¿Cuántas horas tiene su máquina?",
-            opciones: [],
-            respuesta: {
-                usuario: "",
-                estado: "NO RESPONDIO",
-            },
-        },
-        {
-            frase: "Agregue información que considere necesaria",
-            opciones: [],
-            respuesta: {
-                usuario: "",
-                estado: "NO RESPONDIO",
-            },
-        },
-    ],
-};
+const baseDatos = [
+    {id: 9999991, nombre: "oscar", apellido: "gimenez", contrasenia: "1111", dueñoDe:"Tractor Serie 5"},
+    {id: 9999992, nombre: "pedro", apellido: "pascual", contrasenia: "2222", dueñoDe:"Tractor Serie 8"},
+    {id: 9999993, nombre: "florencia", apellido: "rodriguez", contrasenia: "3333", dueñoDe:"Tractor Serie 6"},
+    {id: 9999994, nombre: "sebastian", apellido: "alarcon", contrasenia: "4444", dueñoDe:"Tractor Serie 9"},
+]
 
-const recuperarEstadoUsuario = () => {
-    const estado = localStorage.getItem('usuarioIngresado');
-    if (estado === 'true') {
-        infoUsuario.ingreso = true;
+const productos = [
+    {serie: 5, nombreProducto: "Tractor Serie 5", unidadesCotizables: 20},
+    {serie: 6, nombreProducto: "Tractor Serie 6", unidadesCotizables: 30},
+    {serie: 7, nombreProducto: "Tractor Serie 7", unidadesCotizables: 40},
+    {serie: 8, nombreProducto: "Tractor Serie 8", unidadesCotizables: 60},
+    {serie: 9, nombreProducto: "Tractor Serie 9", unidadesCotizables: 90},
+]
+
+function login() {
+    alert("Bienvenido al servicio Post Venta de John Deere.")
+    let intentosLogin = 0;
+    const maximosIntentos = 4;
+    let permitirIngreso = false;
+    while(intentosLogin < maximosIntentos && !permitirIngreso){
+        const usuarioIngresando = document.getElementById("loginForm")
+
+
     }
-};
+}
 
-const mostrarLogin = () => {
-    document.getElementById('login-section').classList.remove('hidden');
-    document.getElementById('post-venta-section').classList.add('hidden');
-};
+const queDatoEs = document.getElementById("loginForm")
+console.log(queDatoEs)
+/*
+        const usuarioIngresando = prompt("Por favor ingrese su usuario (DNI): ")
+        const usuarioContraseña = prompt("Por favor ingrese su contraseña: ")
 
-const mostrarPostVenta = () => {
-    document.getElementById('login-section').classList.add('hidden');
-    document.getElementById('post-venta-section').classList.remove('hidden');
-    cargarPreguntas();
-};
-
-const login = (username, password) => {
-    if (infoUsuario.usuario === username && infoUsuario.contrasenia === password) {
-        infoUsuario.ingreso = true;
-        localStorage.setItem('usuarioIngresado', 'true');
-        return true;
-    } else {
-        return false;
-    }
-};
-
-const cargarPreguntas = () => {
-    const form = document.getElementById('post-venta-form');
-    form.innerHTML = ''; // Limpiar preguntas existentes
-
-    postVentas.servicios.forEach((servicio, index) => {
-        const div = document.createElement('div');
-        div.classList.add('form-section');
-        div.innerHTML = `
-            <label>${servicio.frase}</label><br>
-            ${servicio.opciones.map((opcion, i) => 
-                `<input type="${servicio.opciones.length > 0 ? 'radio' : 'text'}" name="question${index}" value="${opcion[0]}" id="q${index}o${i}">
-                 <label for="q${index}o${i}">${opcion}</label><br>`
-            ).join('')}
-            ${servicio.opciones.length === 0 ? `<input type="text" name="question${index}" id="q${index}" placeholder="Escriba su respuesta"><br>` : ''}
-        `;
-        form.appendChild(div);
-    });
-};
-
-const validarRespuestas = () => {
-    postVentas.servicios.forEach((servicio, index) => {
-        const answerElement = document.querySelector(`input[name="question${index}"]:checked`) || document.querySelector(`input[name="question${index}"]`);
-        const respuesta = answerElement ? answerElement.value.toUpperCase() : '';
-        servicio.respuesta.usuario = respuesta;
-        servicio.respuesta.estado = respuesta ? "RESPONDIDO" : "NO RESPONDIO";
-        sessionStorage.setItem(`respuesta-${servicio.frase}`, respuesta);
-    });
-};
-
-const iniciarPostVenta = () => {
-    recuperarRespuestas();
-
-    if (infoUsuario.ingreso) {
-        mostrarPostVenta();
-    } else {
-        mostrarLogin();
-    }
-};
-
-const app = () => {
-    recuperarEstadoUsuario();
-    if (infoUsuario.ingreso) {
-        iniciarPostVenta();
-    } else {
-        mostrarLogin();
-    }
-
-    document.getElementById('login-form').addEventListener('submit', (e) => {
-        e.preventDefault();
-        const username = document.getElementById('username').value.toLowerCase();
-        const password = document.getElementById('password').value;
-        if (login(username, password)) {
-            mostrarPostVenta();
+        const quienIngresa = baseDatos.find(cliente => cliente.id === parseInt(usuarioIngresando))
+        if(quienIngresa && quienIngresa.contrasenia === usuarioContraseña){
+            permitirIngreso = true
+            alert(`Hola ${quienIngresa.nombre.toUpperCase()} ${quienIngresa.apellido.toUpperCase()}. Es un gusto poder atenderte.`)
         } else {
-            document.getElementById('login-error').classList.remove('hidden');
+            intentosLogin += 1;
+            if(intentosLogin < maximosIntentos){
+                alert("Los datos ingresados no son correctos, por favor intente nuevamente")
+            }
         }
-    });
-
-    document.getElementById('submit-responses').addEventListener('click', () => {
-        validarRespuestas();
-        document.getElementById('thank-you-message').classList.remove('hidden');
-        sessionStorage.clear();
-    });
-};
-
-app();
+        if(intentosLogin >= maximosIntentos){
+            alert("Usted ha exedido el número de intentos, por favor vuelva a intentarlo en cinco minutos")
+        }
+    }
+}
+ */
