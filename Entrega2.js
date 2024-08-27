@@ -1,11 +1,29 @@
 /* Se simula una base de datos de clientes, que se supone se carga desde antes cuando adquieren la máquina */
+class ClientesNuevos{
+    constructor(id, nombre, apellido, contrasenia, duenioDe){
+        this.id = id;
+        this.nombre = nombre;
+        this.apellido = apellido;
+        this.contrasenia = contrasenia;
+        this.duenioDe = duenioDe;
+    }
+}
 
 const baseDatos = [
-    {id: 9999991, nombre: "oscar", apellido: "gimenez", contrasenia: "1111", dueñoDe:"Tractor Serie 5"},
-    {id: 9999992, nombre: "pedro", apellido: "pascual", contrasenia: "2222", dueñoDe:"Tractor Serie 8"},
-    {id: 9999993, nombre: "florencia", apellido: "rodriguez", contrasenia: "3333", dueñoDe:"Tractor Serie 6"},
-    {id: 9999994, nombre: "sebastian", apellido: "alarcon", contrasenia: "4444", dueñoDe:"Tractor Serie 9"},
+    {id: "9999991", nombre: "oscar", apellido: "gimenez", contrasenia: "1111", duenioDe:"Tractor Serie 5"},
+    {id: "9999992", nombre: "pedro", apellido: "pascual", contrasenia: "2222", duenioDe:"Tractor Serie 8"},
+    {id: "9999993", nombre: "florencia", apellido: "rodriguez", contrasenia: "3333", duenioDe:"Tractor Serie 6"},
+    {id: "9999994", nombre: "sebastian", apellido: "alarcon", contrasenia: "4444", duenioDe:"Tractor Serie 9"},
 ]
+/* Se simula una base de datos de los productos que tiene el concesionario, esto se supone varía muy poco porque no se están lanzando nuevos productos constantemente */
+class ProductosNuevos{
+    constructor(serie, nombreProducto, unidadesCotizables){
+        this.serie = serie;
+        this.nombreProducto = nombreProducto;
+        this.unidadesCotizables = unidadesCotizables;
+    }
+}
+
 
 const productos = [
     {serie: 5, nombreProducto: "Tractor Serie 5", unidadesCotizables: 20},
@@ -15,37 +33,75 @@ const productos = [
     {serie: 9, nombreProducto: "Tractor Serie 9", unidadesCotizables: 90},
 ]
 
-function login() {
-    alert("Bienvenido al servicio Post Venta de John Deere.")
-    let intentosLogin = 0;
-    const maximosIntentos = 4;
-    let permitirIngreso = false;
-    while(intentosLogin < maximosIntentos && !permitirIngreso){
-        const usuarioIngresando = document.getElementById("loginForm")
 
-
-    }
-}
-
-const queDatoEs = document.getElementById("loginForm")
-console.log(queDatoEs)
-/*
-        const usuarioIngresando = prompt("Por favor ingrese su usuario (DNI): ")
-        const usuarioContraseña = prompt("Por favor ingrese su contraseña: ")
-
-        const quienIngresa = baseDatos.find(cliente => cliente.id === parseInt(usuarioIngresando))
-        if(quienIngresa && quienIngresa.contrasenia === usuarioContraseña){
-            permitirIngreso = true
-            alert(`Hola ${quienIngresa.nombre.toUpperCase()} ${quienIngresa.apellido.toUpperCase()}. Es un gusto poder atenderte.`)
+/* Función de ingreso que ejecuta las demás funciones */
+function login(){
+    document.addEventListener('DOMContentLoaded', () => { 
+    const form = document.getElementById('loginForm');
+    form.addEventListener('submit', (event) => {
+       
+        event.preventDefault();
+    
+     
+        const userIDIngresando = document.getElementById('username').value;
+        const passwordIngresando = document.getElementById('password').value;
+        
+   
+        const usuarioEncontrado = baseDatos.find(usuario => 
+            usuario.id === userIDIngresando && usuario.contrasenia === passwordIngresando
+        );
+      
+        if (usuarioEncontrado) {
+            localStorage.setItem(`usuario`, JSON.stringify(usuarioEncontrado))
+            window.location.href = `pages/servicios.html`;
+            
         } else {
-            intentosLogin += 1;
-            if(intentosLogin < maximosIntentos){
-                alert("Los datos ingresados no son correctos, por favor intente nuevamente")
-            }
+            formulario = document.getElementById("loginForm")
+            let notificacion = document.createElement(`p`)
+            notificacion.textContent = `Los datos ingresados son incorrectos`
+            formulario.appendChild(notificacion)
         }
-        if(intentosLogin >= maximosIntentos){
-            alert("Usted ha exedido el número de intentos, por favor vuelva a intentarlo en cinco minutos")
-        }
-    }
+    });
+
+});
+
+usuarioDentro()
 }
- */
+
+/* Se crea la función que determina que tipo de usuario ingresó, es decir, que tipo de máquina posee para saber que precios se le ofrece */
+function usuarioDentro(){
+    window.addEventListener(`DOMContentLoaded`, ()=>{
+        const usuario = JSON.parse(localStorage.getItem(`usuario`));
+        if(usuario){
+            const bienvenida = document.getElementById("bienvenida")
+
+            bienvenida.textContent = `Bienvenido ${(usuario.nombre).toUpperCase()} ${(usuario.apellido).toUpperCase()}` 
+        }
+        const maquina = productos.find(maq => maq.nombreProducto === usuario.duenioDe)
+        
+        const valor1 = document.getElementById(`precio1`)
+        const valor2 = document.getElementById("precio2")
+        const valor3 = document.getElementById(`precio3`)
+        const valor4 = document.getElementById("precio4")
+        if(valor1){
+            valor1.textContent = `Precio: $${(maquina.unidadesCotizables * 1000)}`
+        }
+        if(valor2){
+            valor2.textContent = `Precio: $${(maquina.unidadesCotizables * 2000)}`
+        }
+        if(valor3){
+            valor3.textContent = `Precio: $${(maquina.unidadesCotizables * 500)}`
+        }
+        if(valor4){
+            valor4.textContent = `Precio: $${(maquina.unidadesCotizables * 4000)}`
+        }
+    })
+}
+
+login()
+
+
+
+    
+
+
